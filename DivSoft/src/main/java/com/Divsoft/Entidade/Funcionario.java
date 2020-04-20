@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
@@ -20,17 +21,16 @@ public class Funcionario implements Serializable{
 	private Long id;
 	
 	@Column(name = "nome",nullable = false)
-	@NotBlank(message = "Obrigatóri ter o nome")
+	@NotBlank(message = "Campo Obrigatorio")
 	@Length(max=60 ,min = 10, message = "O nome deve ter entre 10 e 60 caracteres")
 	private String nome;
 	
-	@Column(name = "login",nullable = false)
-	@NotBlank(message = "Obrigatóri ter o nome")
-	@Length(max=60 ,min = 10, message = "O Login deve ter entre 10 e 60 caracteres")
+	@Column(name = "login",length = 80, nullable = true)
+	@Email(message = "Informe um E-mail v�lido")
 	private String Login;
 	
 	@Column(name = "senha", nullable = false)
-	private  int senha;
+	private  String senha;
 	
 	
 	
@@ -52,18 +52,16 @@ public class Funcionario implements Serializable{
 	public void setLogin(String login) {
 		Login = login;
 	}
-	public int getSenha() {
+	
+	public String getSenha() {
 		return senha;
 	}
-	public void setSenha(int senha) {
+	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
-	
-	
 	public Funcionario() {}
 	
-	public Funcionario(Long id, String nome, String login, int senha) {
+	public Funcionario(Long id, String nome, String login, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -79,7 +77,7 @@ public class Funcionario implements Serializable{
 		result = prime * result + ((Login == null) ? 0 : Login.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + senha;
+		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		return result;
 	}
 	@Override
@@ -106,7 +104,10 @@ public class Funcionario implements Serializable{
 				return false;
 		} else if (!nome.equals(other.nome))
 			return false;
-		if (senha != other.senha)
+		if (senha == null) {
+			if (other.senha != null)
+				return false;
+		} else if (!senha.equals(other.senha))
 			return false;
 		return true;
 	}

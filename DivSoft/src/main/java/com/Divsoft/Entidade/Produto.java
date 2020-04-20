@@ -1,7 +1,11 @@
 package com.Divsoft.Entidade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
@@ -35,8 +40,8 @@ public class Produto implements Serializable {
 	private Date validade;
 	
 	@Column(name = "descricao",nullable = false)
-	@NotBlank(message = "Obrigatóri ter o nome")
-	@Length(max=200 ,min = 10, message = "O nome deve ter entre 10 e 200 caracteres")
+	@NotBlank(message = "Campo Obrigatorio")
+	@Length(max=200 ,min = 3, message = "O nome deve ter entre 3 e 200 caracteres")
 	private String descricao;
 	
 	@Column(name = "quantidade",nullable = false)
@@ -48,6 +53,9 @@ public class Produto implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "estoque" , nullable = false)
 	private Estoque estoque;
+	
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ProdutoVenda> produtovenda= new HashSet<>();
 
 	
 	
@@ -94,7 +102,23 @@ public class Produto implements Serializable {
 	public void setValor(float valor) {
 		this.valor = valor;
 	}
-
+	
+	
+	public Set<ProdutoVenda> getProdutovenda() {
+		return produtovenda;
+	}
+	public void setProdutovenda(Set<ProdutoVenda> produtovenda) {
+		this.produtovenda = produtovenda;
+	}
+	
+	
+	public List<Venda> getvenda(){
+		List<Venda> vendas = new ArrayList<Venda>();
+		for(ProdutoVenda o :produtovenda) {
+			vendas.add(o.getVenda());
+		}
+		return vendas;
+	}
 	
 	public Produto () {}
 	

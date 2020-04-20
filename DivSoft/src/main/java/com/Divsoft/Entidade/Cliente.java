@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,11 +49,12 @@ public class Cliente  implements Serializable{
 	
 	@Column(name = "telefone",nullable = false)
 	@NotNull(message = "Informe o telefone")
-	
 	private int telefone;
 	
+	
 	@Column(name = "cpf",nullable = false)
-	private int cpf;
+	@CPF(message = "Informe um CPF valido")
+	private String cpf;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "Data_cadastro_Cliente",nullable = false)
@@ -80,10 +82,11 @@ public class Cliente  implements Serializable{
 	public void setTelefone(int telefone) {
 		this.telefone = telefone;
 	}
-	public int getCpf() {
+	
+	public String getCpf() {
 		return cpf;
 	}
-	public void setCpf(int cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 	public Long getId() {
@@ -135,7 +138,7 @@ public class Cliente  implements Serializable{
 	
 	public Cliente() {}
 	
-	public Cliente(Long id, String nome, String endereco, int telefone, int cpf,Date DataCadastro) {
+	public Cliente(Long id, String nome, String endereco, int telefone, String cpf,Date DataCadastro) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -150,9 +153,12 @@ public class Cliente  implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + cpf;
+		result = prime * result + ((DataCadastro == null) ? 0 : DataCadastro.hashCode());
+		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
+		result = prime * result + ((debito == null) ? 0 : debito.hashCode());
 		result = prime * result + ((endereco == null) ? 0 : endereco.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((listavenda == null) ? 0 : listavenda.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + telefone;
 		return result;
@@ -167,7 +173,20 @@ public class Cliente  implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		if (cpf != other.cpf)
+		if (DataCadastro == null) {
+			if (other.DataCadastro != null)
+				return false;
+		} else if (!DataCadastro.equals(other.DataCadastro))
+			return false;
+		if (cpf == null) {
+			if (other.cpf != null)
+				return false;
+		} else if (!cpf.equals(other.cpf))
+			return false;
+		if (debito == null) {
+			if (other.debito != null)
+				return false;
+		} else if (!debito.equals(other.debito))
 			return false;
 		if (endereco == null) {
 			if (other.endereco != null)
@@ -178,6 +197,11 @@ public class Cliente  implements Serializable{
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (listavenda == null) {
+			if (other.listavenda != null)
+				return false;
+		} else if (!listavenda.equals(other.listavenda))
 			return false;
 		if (nome == null) {
 			if (other.nome != null)

@@ -2,12 +2,13 @@ package com.Divsoft.Entidade;
 
 import java.io.Serializable;
 
-
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 
 
 
-
+@Entity
 public class ProdutoVenda implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -15,6 +16,7 @@ public class ProdutoVenda implements Serializable {
 	@EmbeddedId
 	private ProdutoVendaPK id = new ProdutoVendaPK();
 	
+	@Column(nullable = false)
 	private boolean comprar;
 	
 	public ProdutoVenda() {}
