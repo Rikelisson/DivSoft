@@ -44,7 +44,7 @@ public class EstoqueResource {
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}" )
 	public ResponseEntity<Void> update(@RequestBody Estoque obj, @PathVariable Long id) {
 		obj.setId(id);
-		estoqueService.Update(obj);
+		estoqueService.Atualizar(obj);
 		return ResponseEntity.noContent().build();
 	}
 	
