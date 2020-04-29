@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Divsoft.Entidade.Funcionario;
@@ -17,6 +18,9 @@ public class FuncionarioService {
 	@Autowired
 	private FuncionarioRepository funcionarioRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+	
 	public  List<Funcionario>  ListaFuncionario() {
 		 return funcionarioRepository.findAll();
 	}
@@ -27,6 +31,7 @@ public class FuncionarioService {
 	}
 	
 	public Funcionario save(Funcionario obj) {
+		obj.setSenha(encoder.encode(obj.getSenha()));
 		return funcionarioRepository.save(obj);
 	}
 	

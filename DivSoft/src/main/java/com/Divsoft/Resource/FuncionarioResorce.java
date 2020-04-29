@@ -44,7 +44,7 @@ public class FuncionarioResorce {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}" )
-	public ResponseEntity<Void>update(@RequestBody Funcionario funcionario,@PathVariable Long id){
+	public ResponseEntity<Void>update(@Valid @RequestBody Funcionario funcionario,@PathVariable Long id){
 		funcionario.setId(id);
 		funcionarioService.update(funcionario);
 		return ResponseEntity.noContent().build();

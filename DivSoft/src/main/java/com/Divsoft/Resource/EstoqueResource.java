@@ -3,7 +3,6 @@ package com.Divsoft.Resource;
 import java.net.URI;
 import java.util.List;
 
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,7 @@ public class EstoqueResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> save(@Valid @RequestBody Estoque estoque) {
+	public ResponseEntity<Void> save(@RequestBody Estoque estoque) {
 		Estoque obj = estoqueService.Salvar(estoque);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();

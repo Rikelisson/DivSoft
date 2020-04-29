@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class ProdutoResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
 	public ResponseEntity<Void>save(@Valid @RequestBody Produto produto){
 		Produto obj= produtoService.save(produto);
 		URI uri=ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -45,6 +47,7 @@ public class ProdutoResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
 	public ResponseEntity<Void> Update(@RequestBody Produto produto, @PathVariable Long id ){
 		produto.setId(id);
 		produtoService.Update(produto);
@@ -52,6 +55,7 @@ public class ProdutoResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE,value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
 	public ResponseEntity<Void> Deletar(@PathVariable Long id){
 		produtoService.Deletar(id);
 		return ResponseEntity.noContent().build();

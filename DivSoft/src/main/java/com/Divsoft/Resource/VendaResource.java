@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,7 @@ public class VendaResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
 	public ResponseEntity<Void>save(@Valid @RequestBody Venda venda){
 		Venda obj= service.save(venda);
 		URI uri=ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -43,6 +45,7 @@ public class VendaResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
 	public ResponseEntity<Void> Update(@RequestBody Venda venda, @PathVariable Long id ){
 		venda.setId(id);
 		service.Update(venda);
@@ -50,6 +53,7 @@ public class VendaResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE,value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
 	public ResponseEntity<Void> Deletar(@PathVariable Long id){
 		service.Deletar(id);
 		return ResponseEntity.noContent().build();

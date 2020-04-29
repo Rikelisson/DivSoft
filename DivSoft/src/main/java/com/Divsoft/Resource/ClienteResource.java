@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +44,7 @@ public class ClienteResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
 	public ResponseEntity<Void>save(@Valid @RequestBody Cliente cliente){
 		Cliente obj= clienteService.Salvar(cliente);
 		URI uri=ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -51,6 +52,7 @@ public class ClienteResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<Void> UpdateCliente(@RequestBody Cliente cliente, @PathVariable Long id ){
 		cliente.setId(id);
 		clienteService.Update(cliente);
@@ -58,6 +60,7 @@ public class ClienteResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE,value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<Void> DeletarCliente(@PathVariable Long id){
 		clienteService.Deletar(id);
 		return ResponseEntity.noContent().build();

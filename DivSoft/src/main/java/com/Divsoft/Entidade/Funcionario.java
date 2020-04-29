@@ -1,18 +1,30 @@
 package com.Divsoft.Entidade;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.Divsoft.Enums.PerfilAcesso;
+import com.Divsoft.Service.validators.FuncionarioInsert;
+
 @Entity
+@FuncionarioInsert
 public class Funcionario implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -25,15 +37,19 @@ public class Funcionario implements Serializable{
 	@Length(max=60 ,min = 10, message = "O nome deve ter entre 10 e 60 caracteres")
 	private String nome;
 	
-	@Column(name = "login",length = 80, nullable = false)
+	@Column(name = "login",length = 80, nullable = false,unique = false)
 	@NotBlank(message = "Campo Obrigatorio")
 	@Email(message = "Informe um E-mail válido")
-	private String login;
+	private String email;
 	
 	@Column(name = "senha", nullable = false)
 	private  String senha;
 	
-	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@NotNull(message = "E necessário informa um perfil")
+	@Size(min = 1,message = "Informe o perfil")
+	@CollectionTable
+	private Set<Integer> perfis = new HashSet<>();
 	
 	public Long getId() {
 		return id;
@@ -48,11 +64,11 @@ public class Funcionario implements Serializable{
 		this.nome = nome;
 	}
 	
-	public String getLogin() {
-		return login;
+	public String getemail() {
+		return email;
 	}
-	public void setLogin(String login) {
-		this.login = login;
+	public void setemail(String email) {
+		this.email = email;
 	}
 	public String getSenha() {
 		return senha;
@@ -60,6 +76,18 @@ public class Funcionario implements Serializable{
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+	
+	public void addPerfil(PerfilAcesso perfilAcesso) {
+		perfis.add(perfilAcesso.getCodigo());
+	}
+	
+	public Set<PerfilAcesso> getPerfis(){
+		return perfis.stream().map(x -> PerfilAcesso.toEnum(x)).collect(Collectors.toSet());
+	}
+	
+	
+	
+	
 	public Funcionario() {}
 	
 	
@@ -68,7 +96,7 @@ public class Funcionario implements Serializable{
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.login = login;
+		this.email = login;
 		this.senha = senha;
 	}
 	
@@ -77,7 +105,7 @@ public class Funcionario implements Serializable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((login == null) ? 0 : login.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		return result;
@@ -96,10 +124,10 @@ public class Funcionario implements Serializable{
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (login == null) {
-			if (other.login != null)
+		if (email == null) {
+			if (other.email != null)
 				return false;
-		} else if (!login.equals(other.login))
+		} else if (!email.equals(other.email))
 			return false;
 		if (nome == null) {
 			if (other.nome != null)
