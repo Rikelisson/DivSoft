@@ -35,7 +35,7 @@ public class Venda implements Serializable {
 	private Long id;
 	
 	@Column(length = 60, name = "nome_cliente",nullable = false)
-	@NotBlank(message = "Campo Obricatório")
+	@NotBlank(message = "Campo Obricatï¿½rio")
 	@Length(max=60 ,min = 10, message = "O nome deve ter entre 10 e 60 caracteres")
 	private String nome_cliente;
 	
@@ -54,6 +54,10 @@ public class Venda implements Serializable {
 
 	@OneToMany(mappedBy = "id.venda")
 	private Set<ProdutoVenda> produtovenda = new HashSet<>();
+	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Funcionario funcionario;
 	
 	
 	public Long getId() {
@@ -113,6 +117,16 @@ public class Venda implements Serializable {
 			produtos.add(o.getProduto());
 		}
 		return produtos;
+	}
+	
+	
+
+	public Funcionario getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
 	}
 
 	public Venda() {}

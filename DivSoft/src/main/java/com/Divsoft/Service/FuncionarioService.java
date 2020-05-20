@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Divsoft.Entidade.Funcionario;
+import com.Divsoft.Entidade.Venda;
 import com.Divsoft.Exception.objectNotFoundException;
 import com.Divsoft.Repository.FuncionarioRepository;
 
@@ -32,6 +33,13 @@ public class FuncionarioService {
 	
 	public Funcionario save(Funcionario obj) {
 		obj.setSenha(encoder.encode(obj.getSenha()));
+		
+		if(obj.getVendasrealizadas()!=null) {
+			for(Venda o: obj.getVendasrealizadas()) {
+				o.setFuncionario(obj);
+			}
+		}
+		
 		return funcionarioRepository.save(obj);
 	}
 	

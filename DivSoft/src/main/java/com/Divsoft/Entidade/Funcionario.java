@@ -1,10 +1,13 @@
 package com.Divsoft.Entidade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -13,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,6 +26,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.Divsoft.Enums.PerfilAcesso;
 import com.Divsoft.Service.validators.FuncionarioInsert;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @FuncionarioInsert
@@ -50,6 +55,11 @@ public class Funcionario implements Serializable{
 	@Size(min = 1,message = "Informe o perfil")
 	@CollectionTable
 	private Set<Integer> perfis = new HashSet<>();
+	
+	@OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Venda> vendasrealizadas = new ArrayList<Venda>();
+	
 	
 	public Long getId() {
 		return id;
@@ -86,8 +96,18 @@ public class Funcionario implements Serializable{
 	}
 	
 	
-	
-	
+	public List<Venda> getVendasrealizadas() {
+		List<Venda> vendas = new ArrayList<Venda>();
+		for(Venda o :vendasrealizadas) {
+			o.setFuncionario(null);
+			vendas.add(o);
+		}
+		
+		return vendas;
+	}
+	public void setVendasrealizadas(List<Venda> vendasrealizadas) {
+		this.vendasrealizadas = vendasrealizadas;
+	}
 	public Funcionario() {}
 	
 	

@@ -53,7 +53,7 @@ public class ClienteResource {
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
-	public ResponseEntity<Void> UpdateCliente(@RequestBody Cliente cliente, @PathVariable Long id ){
+	public ResponseEntity<Void> UpdateCliente(@Valid @RequestBody Cliente cliente, @PathVariable Long id ){
 		cliente.setId(id);
 		clienteService.Update(cliente);
 		return ResponseEntity.noContent().build();
@@ -61,7 +61,7 @@ public class ClienteResource {
 	
 	@RequestMapping(method = RequestMethod.DELETE,value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
-	public ResponseEntity<Void> DeletarCliente(@PathVariable Long id){
+	public ResponseEntity<Void> DeletarCliente(@Valid @PathVariable Long id){
 		clienteService.Deletar(id);
 		return ResponseEntity.noContent().build();
 		

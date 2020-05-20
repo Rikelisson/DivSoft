@@ -46,7 +46,7 @@ public class VendaResource {
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
-	public ResponseEntity<Void> Update(@RequestBody Venda venda, @PathVariable Long id ){
+	public ResponseEntity<Void> Update(@Valid @RequestBody Venda venda, @PathVariable Long id ){
 		venda.setId(id);
 		service.Update(venda);
 		return ResponseEntity.noContent().build();
@@ -54,7 +54,7 @@ public class VendaResource {
 	
 	@RequestMapping(method = RequestMethod.DELETE,value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
-	public ResponseEntity<Void> Deletar(@PathVariable Long id){
+	public ResponseEntity<Void> Deletar(@Valid @PathVariable Long id){
 		service.Deletar(id);
 		return ResponseEntity.noContent().build();
 		

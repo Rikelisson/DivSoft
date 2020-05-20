@@ -48,7 +48,7 @@ public class ProdutoResource {
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
-	public ResponseEntity<Void> Update(@RequestBody Produto produto, @PathVariable Long id ){
+	public ResponseEntity<Void> Update(@Valid @RequestBody Produto produto, @PathVariable Long id ){
 		produto.setId(id);
 		produtoService.Update(produto);
 		return ResponseEntity.noContent().build();
@@ -56,7 +56,7 @@ public class ProdutoResource {
 	
 	@RequestMapping(method = RequestMethod.DELETE,value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR') || hasAnyRole('PARTICIPANTE')")
-	public ResponseEntity<Void> Deletar(@PathVariable Long id){
+	public ResponseEntity<Void> Deletar(@Valid @PathVariable Long id){
 		produtoService.Deletar(id);
 		return ResponseEntity.noContent().build();
 		
